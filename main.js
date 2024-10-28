@@ -1715,8 +1715,11 @@ async function getAllLights() {
             else {
               let mac = list[keyName]['uniqueid'];
               mac = mac.match(/..:..:..:..:..:..:..:..-../g).toString(); // uniqueid from deconz api information: 01:23:45:67:89:AB:CD:EF-01
+              mac = mac.replace(/-01/g, '');
               mac = mac.replace(/-/g, '');
-              let lightID = mac.replace(/:/g, ''); //should result in ...light.0123456789ABCDEF01 as lightID hard-coded on the device
+              let lightID = mac.replace(/:/g, ''); 
+              /*should result in ...light.0123456789ABCDEF as lightID hard-coded on the device
+              for all lights except those with same mac but -02 or higher */
             }
             
             switch (list[keyName]['type']) {

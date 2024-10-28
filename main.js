@@ -1708,11 +1708,17 @@ async function getAllLights() {
         if ((await logging(res, body, "get all lights")) && body !== "{}") {
           for (let i = 0; i <= count; i++) {
             let keyName = Object.keys(list)[i];
-            let lightID = Object.keys(list)[i];
-            //let mac = list[keyName]['uniqueid'];
-            //mac = mac.match(/..:..:..:..:..:..:..:../g).toString();
-            //let lightID = mac.replace(/:/g, '');
-
+            
+            if false {  // TODO: Add an adapter.config variable to switch between ligthID built from sequence number in API request or the uniqueid
+              let lightID = Object.keys(list)[i];            
+            }
+            else {
+              let mac = list[keyName]['uniqueid'];
+              mac = mac.match(/..:..:..:..:..:..:..:..-../g).toString(); // uniqueid from deconz api information: 01:23:45:67:89:AB:CD:EF-01
+              mac = mac.replace(/-/g, '');
+              let lightID = mac.replace(/:/g, ''); //should result in ...light.0123456789ABCDEF01 as lightID hard-coded on the device
+            }
+            
             switch (list[keyName]['type']) {
               case 'Window covering device':  // is this a window covering unit?
               case 'Window covering controller':  // is this a window covering unit?
